@@ -1,0 +1,7 @@
+
+*.cmd
+
+*.jar
+rest-api/mvnw
+rest-api/.mvn/wrapper/maven-wrapper.properties
+rest-api/.mvn/wrapper/maven-wrapper.jar
