@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan
-@PropertySource({"classpath:application.properties"})
 public class ActivitiBpmEngineConfiguration {
 
 
