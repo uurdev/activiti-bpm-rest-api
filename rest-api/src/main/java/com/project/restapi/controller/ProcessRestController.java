@@ -2,6 +2,7 @@ package com.project.restapi.controller;
 
 import com.project.restapi.dto.TaskResultDto;
 import com.project.restapi.service.ProcessService;
+import lombok.AllArgsConstructor;
 import org.activiti.engine.task.Task;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,13 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController(value = "/api/")
+@AllArgsConstructor
 public class ProcessRestController {
 
     private final ProcessService processService;
-
-    public ProcessRestController(ProcessService processService) {
-        this.processService = processService;
-    }
 
     @PostMapping(value = "/start/process")
     @ResponseBody
