@@ -10,6 +10,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,18 +23,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class ActivitiBpmEngineConfiguration {
 
 	@Bean
-	public DataSource postgreDatabaseConnection() {
+	public DataSource postgresDatabaseConnection() {
 		return DataSourceBuilder.create().url("jdbc:postgresql://localhost:5432/activitirest").username("postgres").password("postgres").driverClassName("org.postgresql.Driver").build();
 	}
 
-	@Bean
 	DataSource h2DatabaseConnection() {
 		return DataSourceBuilder.create().url("jdbc:h2:mem:activitirest").username("sa").password("password").driverClassName("org.h2.Driver").build();
 	}
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {
-		return new DataSourceTransactionManager(h2DatabaseConnection());
+		return new DataSourceTransactionManager(postgresDatabaseConnection());
 	}
 
 	@Bean
@@ -46,7 +46,7 @@ public class ActivitiBpmEngineConfiguration {
 	@Bean
 	public SpringProcessEngineConfiguration processEngineConfiguration() {
 		SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
-		config.setDataSource(h2DatabaseConnection());
+		config.setDataSource(postgresDatabaseConnection());
 		config.setTransactionManager(transactionManager());
 //		config.setDatabaseSchemaUpdate("update");
 		config.setDatabaseSchemaUpdate("create-drop");
