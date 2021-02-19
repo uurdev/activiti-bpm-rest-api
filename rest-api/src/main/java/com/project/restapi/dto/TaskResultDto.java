@@ -14,6 +14,10 @@ public class TaskResultDto {
 
     private String taskName;
 
+    private String taskOwnerName;
+
+    private String taskAssignee;
+
     private Map<String, Object> processVariables;
 
 }
