@@ -17,7 +17,7 @@ public class ProcessInstanceController {
     private final RuntimeService runtimeService;
 
 
-    @PostMapping(value = "/start")
+    @PostMapping(value = "/start/{defKey}/{variables}")
     public ProcessInstanceDto startProcessInstance(@PathVariable String defKey, @PathVariable Map<String, Object> variables) {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(defKey, variables);
         if (processInstance != null) return new ProcessInstanceDto(processInstance, null);
