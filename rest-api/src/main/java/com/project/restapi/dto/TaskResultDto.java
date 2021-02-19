@@ -4,7 +4,10 @@ import lombok.*;
 
 import java.util.Map;
 
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class TaskResultDto {
 
     private String taskId;
