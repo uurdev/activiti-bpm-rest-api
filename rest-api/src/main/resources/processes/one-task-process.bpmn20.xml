@@ -3,11 +3,16 @@
         xmlns:activiti="http://activiti.org/bpmn"
         targetNamespace="Examples">
 
-    <process id="oneTaskProcess" name="The One Task Process">
+    <process id="firstProcess" name="The One Task Process">
         <startEvent id="theStart" />
-        <sequenceFlow id="flow1" sourceRef="theStart" targetRef="theTask" />
-        <userTask id="theTask" name="my task" activiti:assignee="user"/>
-        <sequenceFlow id="flow2" sourceRef="theTask" targetRef="theEnd" />
+        <sequenceFlow id="flow1" sourceRef="theStart" targetRef="theUserTask" />
+        <userTask id="theUserTask" name="my task" activiti:assignee="user" activiti:candidateGroups="user"/>
+
+        <sequenceFlow id="flow2" sourceRef="theUserTask" targetRef="theAdminTask" />
+
+        <userTask id="theAdminTask" name="my task" activiti:assignee="admin" activiti:candidateGroups="admin"/>
+
+        <sequenceFlow id="flow3" sourceRef="theAdminTask" targetRef="theEnd" />
         <endEvent id="theEnd" />
     </process>
 

@@ -22,62 +22,62 @@ import org.springframework.transaction.PlatformTransactionManager;
 @ComponentScan
 public class ActivitiBpmEngineConfiguration {
 
-	@Bean
-	public DataSource postgresDatabaseConnection() {
-		return DataSourceBuilder.create().url("jdbc:postgresql://localhost:5432/activitirest").username("postgres").password("postgres").driverClassName("org.postgresql.Driver").build();
-	}
+    @Bean
+    public DataSource postgresDatabaseConnection() {
+        return DataSourceBuilder.create().url("jdbc:postgresql://localhost:5432/activitirest").username("postgres").password("postgres").driverClassName("org.postgresql.Driver").build();
+    }
 
-	DataSource h2DatabaseConnection() {
-		return DataSourceBuilder.create().url("jdbc:h2:mem:activitirest").username("sa").password("password").driverClassName("org.h2.Driver").build();
-	}
+    DataSource h2DatabaseConnection() {
+        return DataSourceBuilder.create().url("jdbc:h2:mem:activitirest").username("sa").password("password").driverClassName("org.h2.Driver").build();
+    }
 
-	@Bean
-	public PlatformTransactionManager transactionManager() {
-		return new DataSourceTransactionManager(postgresDatabaseConnection());
-	}
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(postgresDatabaseConnection());
+    }
 
-	@Bean
-	public ProcessEngineFactoryBean processEngine() {
-		ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
-		factoryBean.setProcessEngineConfiguration(processEngineConfiguration());
-		return factoryBean;
-	}
+    @Bean
+    public ProcessEngineFactoryBean processEngine() {
+        ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
+        factoryBean.setProcessEngineConfiguration(processEngineConfiguration());
+        return factoryBean;
+    }
 
-	@Bean
-	public SpringProcessEngineConfiguration processEngineConfiguration() {
-		SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
-		config.setDataSource(postgresDatabaseConnection());
-		config.setTransactionManager(transactionManager());
-//		config.setDatabaseSchemaUpdate("update");
-		config.setDatabaseSchemaUpdate("create-drop");
-		config.setHistory("audit");
-		config.setAsyncExecutorActivate(true);
-		return config;
-	}
+    @Bean
+    public SpringProcessEngineConfiguration processEngineConfiguration() {
+        SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
+        config.setDataSource(postgresDatabaseConnection());
+        config.setTransactionManager(transactionManager());
+        config.setDatabaseSchemaUpdate("update");
+//		config.setDatabaseSchemaUpdate("create-drop");
+        config.setHistory("audit");
+        config.setAsyncExecutorActivate(true);
+        return config;
+    }
 
-	@Bean
-	public RepositoryService repositoryService(ProcessEngine processEngine) {
-		return processEngine.getRepositoryService();
-	}
+    @Bean
+    public RepositoryService repositoryService(ProcessEngine processEngine) {
+        return processEngine.getRepositoryService();
+    }
 
-	@Bean
-	public RuntimeService runtimeService(ProcessEngine processEngine) {
-		return processEngine.getRuntimeService();
-	}
+    @Bean
+    public RuntimeService runtimeService(ProcessEngine processEngine) {
+        return processEngine.getRuntimeService();
+    }
 
-	@Bean
-	public TaskService taskService(ProcessEngine processEngine) {
-		return processEngine.getTaskService();
-	}
+    @Bean
+    public TaskService taskService(ProcessEngine processEngine) {
+        return processEngine.getTaskService();
+    }
 
-	@Bean
-	public IdentityService identityService(ProcessEngine processEngine) {
-		return processEngine.getIdentityService();
-	}
+    @Bean
+    public IdentityService identityService(ProcessEngine processEngine) {
+        return processEngine.getIdentityService();
+    }
 
-	@Bean
-	public ManagementService managementService(ProcessEngine processEngine) {
-		return processEngine.getManagementService();
-	}
+    @Bean
+    public ManagementService managementService(ProcessEngine processEngine) {
+        return processEngine.getManagementService();
+    }
 
 }

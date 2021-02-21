@@ -32,7 +32,7 @@ public class ProcessRestController {
         List<Task> tasks = processService.getUserTasks(uid);
         List<TaskResultDto> taskResultDtos = new ArrayList<TaskResultDto>();
         for (Task task : tasks) {
-            taskResultDtos.add(new TaskResultDto(task.getId(), task.getName(), task.getProcessVariables()));
+            taskResultDtos.add(new TaskResultDto(task.getId(), task.getName(),task.getOwner(),task.getAssignee(), task.getProcessVariables()));
         }
         return taskResultDtos;
     }

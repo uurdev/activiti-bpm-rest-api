@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController(value = "/api/task")
 @AllArgsConstructor
@@ -25,12 +25,27 @@ public class TaskRestController {
     }
 
     @PostMapping(value = "/unclaim")
-    public TaskResultDto unclaim(@PathVariable String taskId) {
+    public TaskResultDto unClaimTask(@PathVariable String taskId) {
         if (taskId != null) {
             taskService.unclaim(taskId);
             Task task = taskService.createTaskQuery().taskId(taskId).list().get(0);
             return new TaskResultDto(taskId, task.getName(), task.getOwner(), task.getAssignee(), task.getProcessVariables());
         } else return null;
+    }
+
+
+    @GetMapping(value = "/group")
+    @ResponseBody
+    public List<Task> getGroupTasks(@RequestParam String id) {
+        if (id != null) return taskService.createTaskQuery().taskCandidateGroup(id).active().list();
+        else return null;
+    }
+
+    @GetMapping(value = "/user")
+    @ResponseBody
+    public List<Task> getUserTasks(@RequestParam String id) {
+        if (id != null) return taskService.createTaskQuery().taskCandidateUser(id).active().list();
+        else return null;
     }
 
 
