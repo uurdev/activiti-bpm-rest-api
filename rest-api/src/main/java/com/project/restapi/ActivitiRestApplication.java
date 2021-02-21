@@ -32,31 +32,30 @@ public class ActivitiRestApplication implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         springProcessEngineConfiguration.setDeploymentResources(DeploymentFile.getBpmnFiles());
-        createUserAndGroup();
     }
 
 
     private void createUserAndGroup() {
-        User user =identityService.newUser("user");
+        User user = identityService.newUser("user");
 
-        User admin=identityService.newUser("admin");
+        User admin = identityService.newUser("admin");
 
         identityService.saveUser(user);
 
         identityService.saveUser(admin);
 
-		Group userGroup=identityService.newGroup("user");
+        Group userGroup = identityService.newGroup("user");
 
-		Group adminGroup=identityService.newGroup("admin");
+        Group adminGroup = identityService.newGroup("admin");
 
-		identityService.saveGroup(userGroup);
+        identityService.saveGroup(userGroup);
 
-		identityService.saveGroup(adminGroup);
+        identityService.saveGroup(adminGroup);
 
-		identityService.createMembership(user.getId(),userGroup.getId());
+        identityService.createMembership(user.getId(), userGroup.getId());
 
-		identityService.createMembership(admin.getId(),adminGroup.getId());
+        identityService.createMembership(admin.getId(), adminGroup.getId());
 
 
-	}
+    }
 }

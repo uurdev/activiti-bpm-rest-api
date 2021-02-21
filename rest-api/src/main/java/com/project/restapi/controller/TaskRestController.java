@@ -4,7 +4,6 @@ import com.project.restapi.dto.TaskResultDto;
 import lombok.AllArgsConstructor;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
