@@ -1,61 +1,62 @@
 package com.project.restapi;
 
-import com.project.restapi.bpmn.DeploymentFile;
-import lombok.AllArgsConstructor;
 import org.activiti.engine.IdentityService;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.activiti.spring.boot.RestApiAutoConfiguration;
 import org.activiti.spring.boot.SecurityAutoConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+import com.project.restapi.bpmn.DeploymentFile;
+
+import lombok.AllArgsConstructor;
+
+@EnableAutoConfiguration(exclude = { RestApiAutoConfiguration.class, SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class })
 @AllArgsConstructor
 public class ActivitiRestApplication implements ApplicationRunner {
 
+	private final SpringProcessEngineConfiguration springProcessEngineConfiguration;
+	private final IdentityService identityService;
 
-    private final SpringProcessEngineConfiguration springProcessEngineConfiguration;
-    private final IdentityService identityService;
+	public static void main(String[] args) {
+		SpringApplication.run(ActivitiRestApplication.class, args);
+	}
 
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		springProcessEngineConfiguration.setDeploymentResources(DeploymentFile.getBpmnFiles());
+		createUserAndGroup();
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(ActivitiRestApplication.class, args);
-    }
+	private void createUserAndGroup() {
+		User user = identityService.newUser("user");
+		user.setPassword("user");
 
+		User admin = identityService.newUser("admin");
+		admin.setPassword("admin");
+		identityService.saveUser(user);
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        springProcessEngineConfiguration.setDeploymentResources(DeploymentFile.getBpmnFiles());
-    }
+		identityService.saveUser(admin);
 
+		Group userGroup = identityService.newGroup("user");
 
-    private void createUserAndGroup() {
-        User user = identityService.newUser("user");
+		Group adminGroup = identityService.newGroup("admin");
 
-        User admin = identityService.newUser("admin");
+		identityService.saveGroup(userGroup);
 
-        identityService.saveUser(user);
+		identityService.saveGroup(adminGroup);
 
-        identityService.saveUser(admin);
+		identityService.createMembership(user.getId(), userGroup.getId());
 
-        Group userGroup = identityService.newGroup("user");
+		identityService.createMembership(admin.getId(), adminGroup.getId());
 
-        Group adminGroup = identityService.newGroup("admin");
+		System.err.println("User account size : "
+				+ identityService.createUserQuery().list().size());
 
-        identityService.saveGroup(userGroup);
-
-        identityService.saveGroup(adminGroup);
-
-        identityService.createMembership(user.getId(), userGroup.getId());
-
-        identityService.createMembership(admin.getId(), adminGroup.getId());
-
-
-    }
+	}
 }
