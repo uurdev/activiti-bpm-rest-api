@@ -6,11 +6,13 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@RestController(value = "/api/process")
+@RestController
+@RequestMapping(value = "/api/process")
 @AllArgsConstructor
 public class ProcessInstanceController {
 

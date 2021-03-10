@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController(value = "/api/")
 @AllArgsConstructor
+@RestController
+@RequestMapping(value = "/api")
 public class ProcessRestController {
 
     private final ProcessService processService;
@@ -35,5 +36,10 @@ public class ProcessRestController {
             taskResultDtos.add(new TaskResultDto(task.getId(), task.getName(),task.getOwner(),task.getAssignee(), task.getProcessVariables()));
         }
         return taskResultDtos;
+    }
+
+    @GetMapping(value = "/alive")
+    public String alive(){
+        return "Hey ! ";
     }
 }
