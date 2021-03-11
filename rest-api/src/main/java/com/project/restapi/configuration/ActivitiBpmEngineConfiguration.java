@@ -23,17 +23,19 @@ public class ActivitiBpmEngineConfiguration {
 
 	@Bean
 	public DataSource postgresDatabaseConnection() {
-		return DataSourceBuilder.create().url("jdbc:postgresql://localhost:5432/activitirest").username("postgres").password("postgres").driverClassName("org.postgresql.Driver").build();
+		return DataSourceBuilder.create().url("jdbc:postgresql://localhost:5432/activitirest").username("postgres")
+				.password("postgres").driverClassName("org.postgresql.Driver").build();
 	}
 
 	@Bean
 	DataSource h2DatabaseConnection() {
-		return DataSourceBuilder.create().url("jdbc:h2:mem:activitirest").username("sa").password("password").driverClassName("org.h2.Driver").build();
+		return DataSourceBuilder.create().url("jdbc:h2:mem:activitirest").username("sa").password("password")
+				.driverClassName("org.h2.Driver").build();
 	}
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {
-		return new DataSourceTransactionManager(h2DatabaseConnection());
+		return new DataSourceTransactionManager(postgresDatabaseConnection());
 	}
 
 	@Bean
@@ -46,10 +48,10 @@ public class ActivitiBpmEngineConfiguration {
 	@Bean
 	public SpringProcessEngineConfiguration processEngineConfiguration() {
 		SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
-		config.setDataSource(h2DatabaseConnection());
+		config.setDataSource(postgresDatabaseConnection());
 		config.setTransactionManager(transactionManager());
-//		config.setDatabaseSchemaUpdate("update");
-		config.setDatabaseSchemaUpdate("create-drop");
+		config.setDatabaseSchemaUpdate("none");
+		// config.setDatabaseSchemaUpdate("create-drop");
 		config.setHistory("audit");
 		config.setAsyncExecutorActivate(true);
 		return config;
