@@ -30,7 +30,7 @@ public class TaskRestController {
 			return null;
 	}
 
-	@PostMapping(value = "/task")
+	@PostMapping(value = "/complete")
 	@ResponseBody
 	public void completeTask(@RequestParam String id) {
 		processService.completeTask(id);
