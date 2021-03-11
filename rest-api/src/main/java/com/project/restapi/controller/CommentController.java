@@ -2,13 +2,13 @@ package com.project.restapi.controller;
 
 import java.util.List;
 
-import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Comment;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.restapi.dto.CommentDto;
@@ -29,8 +29,19 @@ public class CommentController {
 	}
 
 	@GetMapping(value = "/comments")
-	public List<Comment> getAllComments(@PathVariable String id) {
+	public List<Comment> getAllComments(@RequestParam String id) {
 		return taskService.getProcessInstanceComments(id);
+	}
+
+	@DeleteMapping(value = "/comment")
+	public void deleteComment(@RequestParam String id) {
+		taskService.deleteComment(id);
+	}
+
+	@PostMapping(value = "/comment/test")
+	public Comment addComment() {
+		CommentDto dto = new CommentDto("2515", "2511", "Selam");
+		return taskService.addComment(dto.getTaskId(), dto.getProcessId(), dto.getCommentMessage());
 	}
 
 }
