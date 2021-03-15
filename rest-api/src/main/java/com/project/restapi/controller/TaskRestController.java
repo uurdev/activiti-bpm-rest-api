@@ -1,15 +1,24 @@
 package com.project.restapi.controller;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.project.restapi.dto.TaskResultDto;
 import com.project.restapi.service.ProcessService;
 
 import lombok.AllArgsConstructor;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.task.Task;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/task")
@@ -36,7 +45,7 @@ public class TaskRestController {
 		processService.completeTask(id);
 	}
 
-	@GetMapping(value = "/task/{uid}/list")
+	@GetMapping(value = "/{uid}")
 	public List<TaskResultDto> getUserTasks(@PathVariable String uid) {
 		List<Task> tasks = processService.getUserTasks(uid);
 		List<TaskResultDto> taskResultDtos = new ArrayList<TaskResultDto>();
@@ -65,6 +74,14 @@ public class TaskRestController {
 			return taskService.createTaskQuery().taskCandidateGroup(id).active().list();
 		else
 			return null;
+	}
+
+	@PostMapping(value = "/due")
+	public Date setDueDate(@RequestParam String id) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, 1);
+		taskService.setDueDate(id, cal.getTime());
+		return taskService.createTaskQuery().taskId(id).singleResult().getDueDate();
 	}
 
 }
