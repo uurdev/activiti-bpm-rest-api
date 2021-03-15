@@ -51,7 +51,7 @@ public class ProcessRestController {
 	public String deploy() throws IOException {
 		System.err.println("-----------");
 		return repositoryService.createDeployment()
-				.addClasspathResource(DeploymentBpmnFile.BPMN_FILE_PATH + "one-task-process.bpmn20.xml").deploy()
+				.addClasspathResource(DeploymentBpmnFile.BPMN_FILE_PATH + "timer-process.bpmn20.xml").deploy()
 				.getKey();
 	}
 
